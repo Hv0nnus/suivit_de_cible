@@ -4,9 +4,9 @@ clc
 
 T_e = 1;
 T = 100; %Number of observations
-sigma_Q = 10;
-sigma_px = 80;
-sigma_py = 80;
+sigma_Q = 1;
+sigma_px = 200;
+sigma_py = 200;
 
 F = [ 1 T_e 0 0;
       0 1   0 0;
@@ -26,16 +26,14 @@ F = [ 1 T_e 0 0;
        0          sigma_py^2 ]; 
  
  x_init = [3 40 -4 20]';
- x_init = [1000 0 1000 0]';
- 
- x_kalm = x_init;
- P_kalm = eye(4,4);
+ %x_init = [1000 0 1000 0]';
+
  
  
  
 vecteur_x = creat_trajectoire(F, Q, x_init, T);
 vecteur_y = creat_observations(H,R,vecteur_x,T);
- 
+
 
 %load('vecteur_x_avion_voltige.mat');
 %load('vecteur_y_avion_voltige.mat');
@@ -43,7 +41,9 @@ vecteur_y = creat_observations(H,R,vecteur_x,T);
 %  x_voltige =load('vecteur_x_avion_voltige.mat');
 %  y_voltige =load('vecteur_y_avion_voltige.mat');
  
-
+ 
+ x_kalm = [vecteur_y(1,1),0,vecteur_y(2,1),0];
+ P_kalm = eye(4,4);
  
  x_est=zeros(size(vecteur_x));
  x_est(:,1) = x_kalm;
