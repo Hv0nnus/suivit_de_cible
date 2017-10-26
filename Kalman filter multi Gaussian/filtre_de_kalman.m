@@ -7,7 +7,7 @@ function [ x_kalm_k, P_kalm_k weight] = filtre_de_kalman( F, Q, H, R, y_k,x_kalm
 %%% On définit kn
 
 
-n = 4;
+n = 4;% c'est quoi n ?
 
 
 if isnan(y_k)
@@ -19,14 +19,14 @@ if isnan(y_k)
     P_kalm_prec_j = P_kalm_prec(:,:,j);
     
     %Prediction
-    x_kalm_k(:,j) = F*x_kalm_prec_j;
-    P_kalm_k(:,:,j) = F*P_kalm_prec_j*F'+Q;
+    x_kalm_k(:,j) = F*x_kalm_prec_j; % On peut le faire au dessus 
+    P_kalm_k(:,:,j) = F*P_kalm_prec_j*F'+Q; % de meme
   end
     
 else
     x_kalm_k = ones(n,M);
     P_kalm_k = ones(n,n,M);
-    P_kalm_prec(:,:,:);
+    P_kalm_prec(:,:,:); %Pourquoi ?
     for j=1:M
       %Just chose the good kalman prediction for this gaussian
       x_kalm_prec_j = x_kalm_prec(:,j);

@@ -44,7 +44,7 @@ weight_init = weight;
 x_kalm = zeros(length(x_init),M,T);
 %x_kalm(:,1,1) = [-1000 0 600 0]';x_kalm(:,2,1) = [3000 0 -600 0]';x_kalm(:,3,1) = [3000 0 4000 0]';
 %x_kalm([1,3],:,1) = unifrnd(0,4000,2,M);
-U = randn(2,M) * sqrtm(eye(M))*200 + repmat(vecteur_y(:,1),1,M);
+U = randn(2,M) * sqrtm(eye(M))*200 + repmat(vecteur_y(:,1),1,M); % C'est quoi ? et puis sqrtm(Eyes) = Eyse non ? c'est pas sqrt(200) ?
 %vecteur_x(:,i+1) = F * vecteur_x(:,i) + U;
 x_kalm([1,3],:,1) = U;
 P_kalm = ones(length(x_init),length(x_init),M);
