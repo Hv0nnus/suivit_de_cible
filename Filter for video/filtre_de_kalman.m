@@ -40,8 +40,13 @@ else
       K_n = P_n_npr*H'/(H*P_n_npr*H'+ R) ;
       x_kalm_k(:,j) = m_n_npr + K_n*(y_k - H*m_n_npr);
       P_kalm_k(:,:,j) = (eye(n,n) - K_n*H)*P_n_npr;
-
-      weight(j) = weight(j)*mvnpdf(y_k',(H*m_n_npr)',H*P_n_npr*(H')+R);
+      
+      %weight modification
+      %y = y_k'
+      %mu = (H*m_n_npr)'
+      %sig = H*P_n_npr*(H') + R
+      %p = mvnpdf(y_k',(H*m_n_npr)',sig) 
+      weight(j) = mvnpdf(y_k',(H*m_n_npr)',H*P_n_npr*(H')+R);
     end
     weight = weight/sum(weight);
 end 

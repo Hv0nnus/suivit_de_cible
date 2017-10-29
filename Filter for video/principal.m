@@ -40,7 +40,7 @@ vecteur_y = creat_observations(H,R,vecteur_x,T);
 %  x_voltige =load('vecteur_x_avion_voltige.mat');
 %  y_voltige =load('vecteur_y_avion_voltige.mat');
 
-M = 2;
+M = 10;
 weight = ones(1,M)/M;
 weight_init = weight;
 x_kalm = zeros(length(x_init),M,T);
@@ -60,7 +60,6 @@ for k=1:T-1
   [x_kalm(:,:,k+1) P_kalm weight] = filtre_de_kalman( F, Q, H, R, y_k,x_kalm(:,:,k), P_kalm,M,weight);
   x_kalm_mean(:,k+1) = weight*x_kalm(:,:,k+1)';
 end
-
 
 % Estimation avion de ligne
 

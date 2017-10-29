@@ -1,4 +1,4 @@
-function [ x_kalm_k, P_kalm_k weight] = filtre_de_kalman( F, Q, H, R, y_k,x_kalm_prec, P_kalm_prec,M,weight)
+function [ x_kalm_k, P_kalm_k weight] = filtre_de_kalman( F, Q, H, R, y_k,x_kalm_prec, P_kalm_prec,M,weight,threshold)
 
 %%% Estimation de la position à l'instant k connaissant les k observations
 %%% Meilleur estimateur espérance de p(xn/y0:n)
@@ -43,8 +43,14 @@ else
 
       weight(j) = weight(j)*mvnpdf(y_k',(H*m_n_npr)',H*P_n_npr*(H')+R);
     end
+    
+    #KalamanToKeep est une liste de valeur [1,3,5,6,7,8,9] de Kalman qu'il faut garder
+    [kalmanToKeep weight] = chooseGaussianToKeep (weight,x_kalm_k,P_kalm_k,M,threshold);
+    weight = weight(kalmanToKeep);
+    x_kalm_k = x_kalm_k(:,kalmanToKeep);
+    P_kalm_k = P_kalm_k(:,:,kalmanToKeep);
+    
     weight = weight/sum(weight);
 end 
 
 end
-
