@@ -8,7 +8,7 @@
 %
 
 
-function [ Y_disp ] = disparity_projection(X_real_world, f, b)
+function [ Y_disp ] = real_to_disparity(X_real_world, f, b)
 
 K = f*eye(3);
 

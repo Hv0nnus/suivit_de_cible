@@ -3,20 +3,21 @@
 % Fonction fais la projection d'un objet dans R3 sur un plan (R2) (projection
 % objet sur une image)
 % On suppose les coordonnees homogenes 
+% La paire de camera est consideree comme horizontalement rectifié
 % input : 
 % - f : focale de la lentille
 % - X_real_word : coordonnees de l'image en 3D (vecteur 4*1)
-% 
+% - b : the baseline (cf article)
 % output :
 % - X_image : projété de x (3*1)
 % cours : https://team.inria.fr/steep/files/2015/03/poly_3D.pdf
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [X_Image] = projection_to_left_camera (X_real_world,f)
+function [X_Image,P] = real_to_right_camera(X_real_world,f,b)
 
 K = f*eye(3);
-t = zeros(3,1);
-P = [K, t];
+t = [b,0,0];
+P = [K, t'];
 
 X = P*X_real_world;
 X_Image = X/X(3);
