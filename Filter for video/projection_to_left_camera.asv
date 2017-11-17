@@ -14,11 +14,11 @@
 
 function [X_Image] = projection_to_left_camera (X_real_world,f)
 
-P = [f,0,0,0;
-    0,f,0,0;
-    0,0,f,0;];
-P = P / f*X(3);
+K = f*eye(3);
+t = [0,0,0];
+P = [K, t];
 
-X_Image = P*X_real_world;
+X = P*X_real_world;
+X_Image = X/X(3);
 
 end

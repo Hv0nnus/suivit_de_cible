@@ -5,7 +5,7 @@
 % On suppose les coordonnees homogenes 
 % input : 
 % - f : focale de la lentille
-% - X_real_word : coordonnees de l'image en 3D (vecteur 3*1)
+% - X_real_word : coordonnees de l'image en 3D (vecteur 4*1)
 % 
 % output :
 % - X_image : projété de x (3*1)
@@ -15,7 +15,7 @@
 function [X_Image] = projection_to_left_camera (X_real_world,f)
 
 K = f*eye(3);
-t = [0,0,0];
+t = zeros(3,1);
 P = [K, t];
 
 X = P*X_real_world;

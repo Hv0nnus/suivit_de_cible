@@ -38,7 +38,7 @@ R = [ sigma_px^2 0          0;
 
 x_init = [3 40 -4 20 2 30]';
 
-variance_initial = 20000
+variance_initial = 20000;
 
 distance_entre_camera = 10;
 position_camera_1 = [0,0,0];

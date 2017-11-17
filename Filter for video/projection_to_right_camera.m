@@ -6,18 +6,18 @@
 % La paire de camera est consideree comme horizontalement rectifié
 % input : 
 % - f : focale de la lentille
-% - X_real_word : coordonnees de l'image en 3D (vecteur 3*1)
+% - X_real_word : coordonnees de l'image en 3D (vecteur 4*1)
 % - b : the baseline (cf article)
 % output :
 % - X_image : projété de x (3*1)
 % cours : https://team.inria.fr/steep/files/2015/03/poly_3D.pdf
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [X_Image] = projection_to_right_camera(X_real_world,f,b)
+function [X_Image,P] = projection_to_right_camera(X_real_world,f,b)
 
 K = f*eye(3);
 t = [b,0,0];
-P = [K, t];
+P = [K, t'];
 
 X = P*X_real_world;
 X_Image = X/X(3);
