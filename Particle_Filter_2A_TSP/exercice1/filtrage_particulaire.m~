@@ -1,0 +1,20 @@
+
+% x = vecteur colonne (correspond à x_(k-1) pour i = 1 à N
+% yk = la dernière observation en mémoire
+function  [ particule, poids_norm, estimateur ] = filtrage_particulaire(x,y,w,Q,R)
+
+N = length(x);
+Ny = length(y);
+
+xn = randn(N,1)*sqrt(Q) + transition(x,Ny);
+particule = xn;
+
+Y = repmat(yk, N,1);
+poids =  normpdf(Y, (xn.^2)/20, R);
+poids_norm = poids./(sum(poids));
+
+estimateur = sum(poids_norm.*particule);
+
+[particule, poids_norm] = reechantillonnage(paticules, poids
+
+end

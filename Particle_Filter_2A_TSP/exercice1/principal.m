@@ -1,0 +1,34 @@
+clear all
+close all
+clc
+
+N = 100;
+Q = 10;
+R = 1;
+T = 50;
+x0 = 1;
+
+x = creer_trajectoire(x0, T, Q);
+y = creer_observation(x, R, T);
+x_init_filtre = randn(1, N)*sqrt(Q);
+poids_init_filtre = ones(1,N) * 1/N;
+
+
+
+[ particule, poids, x_est] = filtrage_particulaire(x_init_filtre, y, poids_init_filtre, Q, R, 1);
+
+X_est = zeros(1, T);
+X_est(1) = x_est;
+ 
+for k=2:T
+    [ particule, poids, X_est(k)] = filtrage_particulaire(particule, y, poids, Q, R, k);
+end
+[eq, eqm] = erreur_quadratique_moyenne(x, X_est, T);
+eqm
+
+
+plot(x,'b')
+hold on 
+plot(y,'g')
+hold on
+plot(X_est,'r')
