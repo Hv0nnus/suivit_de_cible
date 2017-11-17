@@ -7,7 +7,7 @@ function [ x_kalm_k, P_kalm_k weight] = filtre_de_kalman( F, Q, H, R, y_k,x_kalm
 %%% On définit kn
 
 
-n = 4;
+n = 6;
 
 
 if isnan(y_k)
