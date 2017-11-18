@@ -45,14 +45,32 @@ vecteur_y = creat_observations(H,R,vecteur_x,T);
  x_kalm = [vecteur_y(1,1),0,vecteur_y(2,1),0];
  P_kalm = eye(4,4);
  
- x_est=zeros(size(vecteur_x));
- x_est(:,1) = x_kalm;
- P_0 = P_kalm;
- for k=1:T-1
-     y_k=vecteur_y(:,k+1);
-     [x_est(:,k+1) P_0]=filtre_de_kalman( F, Q, H, R, y_k,x_est(:,k), P_0);
- end
+%  x_est=zeros(size(vecteur_x));
+%  x_est(:,1) = x_kalm;
+%  P_0 = P_kalm;
+%  for k=1:T-1
+%      y_k=vecteur_y(:,k+1);
+%      [x_est(:,k+1) P_0]=filtre_de_kalman( F, Q, H, R, y_k,x_est(:,k), P_0);
+%  end
  
+ 
+N = 1000
+% Estimation avec filtre particulaire 
+x_init_filtre =  sqrtm(Q)*randn(4,1);
+poids_init_filtre = ones(1,N) * 1/N;
+
+
+
+[ particule, poids, x_est] = filtrage_particulaire(x_init_filtre, vecteur_y, poids_init_filtre, Q, R, 1);
+
+X_est = zeros(1, T);
+X_est(1) = x_est;
+ 
+for k=2:T
+    [ particule, poids, X_est(k)] = filtrage_particulaire(particule, y, poids, Q, R, H, k);
+end
+[eq, eqm] = erreur_quadratique_moyenne(x, X_est, T);
+eqm
 % Estimation avion de ligne
 
  

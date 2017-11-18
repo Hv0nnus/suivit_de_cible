@@ -1,4 +1,4 @@
-function vecteur_y = creer_observations(H,R,vecteur_x,T)
+function vecteur_y = creat_observations(H,R,vecteur_x,T)
 
 V = sqrtm(R) * randn(2,T);
 

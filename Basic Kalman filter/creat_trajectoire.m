@@ -1,4 +1,4 @@
-function vecteur_x = creer_trajectoire(F, Q, x_init, T)
+function vecteur_x = creat_trajectoire(F, Q, x_init, T)
 
   vecteur_x = zeros(4,T);
   vecteur_x(:,1) = x_init;
