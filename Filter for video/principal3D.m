@@ -73,7 +73,7 @@ R = [ sigma_px^2 0          0;
 
 % We have to determine which unite are used for postions and speed (m, m/s
 % ? cm, cm/s ? 
-x_init = [3 40 -4 20 2 30]';
+x_init = [3 2 -4 2 2 0.5]';
 
 % x_init alternatif 
 % x_init = [3 -4 2 40 20 30] ;

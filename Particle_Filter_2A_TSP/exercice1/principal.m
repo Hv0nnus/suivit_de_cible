@@ -2,9 +2,9 @@ clear all
 close all
 clc
 
-N = 100;
+N = 1000;
 Q = 10;
-R = 1;
+R = 0.1;
 T = 50;
 x0 = 1;
 
