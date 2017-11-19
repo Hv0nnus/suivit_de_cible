@@ -1,17 +1,29 @@
 clear all
 close all
 clc
+% {name] alternatif : convert vector x from [ x, vx, y, vy ,z, vz] to [x,
+% y,z, vx, vy, vz]
 
-pkg load statistics
+%pkg load statistics
 %pkg load geom3d
 
+% Parameters of the cameras set up
+% f =
+% b =
+%fréquence d'aquisition  (Img/Sec)
+fps = 24;
+
+% Tps temps d'enregistrement en seconde
+Tps = 60;
+
+
 M = 10; % Number of Gaussians that we use
-T_e = 1;
-T = 100; %Number of observations
-sigma_Q = 100;
-sigma_px = sigma_Q*50;
-sigma_py = sigma_Q*50;
-sigma_pz = sigma_Q*50;
+T_e = 1/fps;
+T = fps*Tps; %Number of observations 
+sigma_Q = 10;
+sigma_px = sigma_Q*5;
+sigma_py = sigma_Q*5;
+sigma_pz = sigma_Q*5;
 
 F = [ 1 T_e 0 0 0 0;
     0 1   0 0 0 0;
@@ -19,9 +31,23 @@ F = [ 1 T_e 0 0 0 0;
     0 0   0 1 0 0;
     0 0 0 0 1 T_e;
     0 0 0 0 0 1];
+
+% F alternatif
+% F = [ 1 0 0 T_e 0 0;
+%     0 1 0 0 T_e 0;
+%     0 0 1 0 0 T_e;
+%     0 0 0 1 0 0;
+%     0 0 0 0 1 0;
+%     0 0 0 0 0 1];
+
 H = [ 1 0 0 0 0 0;
    0 0 1 0 0 0;
    0 0 0 0 1 0];
+
+% H alternatif
+% H = [ 1 0 0 0 0 0;
+%    0 0 1 0 0 0;
+%    0 0 0 0 1 0];
 
 MQ = [ (T_e^3)/3   (T_e^2)/2 0         0          0     0           ; 
       (T_e^2)/2   T_e       0         0           0     0           ;  
@@ -29,6 +55,15 @@ MQ = [ (T_e^3)/3   (T_e^2)/2 0         0          0     0           ;
       0           0         (T_e^2)/2 T_e         0     0      ;
       0           0          0    0        (T_e^3)/3 (T_e^2)/2;
       0           0          0    0         (T_e^2)/2 T_e     ];
+  
+ 
+%  MQ alternatif 
+%  MQ = [ (T_e^3)/3    0         0     (T_e^2)/2     0          0            ; 
+%       0           (T_e^3)/3    0         0     (T_e^2)/2      0            ; 
+%       0              0      (T_e^3)/3    0         0         (T_e^2)/2     ; 
+%    (T_e^2)/2         0         0         T_e       0          0            ;
+%       0          (T_e^2)/2     0         0        T_e         0            ;
+%       0              0      (T_e^2)/2    0         0         T_e         ] ;
 
 Q = (sigma_Q^2) * MQ;
 
@@ -36,7 +71,13 @@ R = [ sigma_px^2 0          0;
      0           sigma_py^2 0;
      0           0          sigma_pz^2]; 
 
-x_init = [3 40 -4 20 2 30]';
+% We have to determine which unite are used for postions and speed (m, m/s
+% ? cm, cm/s ? 
+x_init = [3 2 -4 2 2 0.5]';
+
+% x_init alternatif 
+% x_init = [3 -4 2 40 20 30] ;
+
 
 variance_initial = 2000;
 
@@ -49,11 +90,15 @@ vecteur_x = creat_trajectoire_3D(F, Q, x_init, T);
 %[vecteur_y] = projection_to_new_dimension(cl_observation, cr_observation)
 vecteur_y = creat_observations_3D(H,R,vecteur_x,T);
 
+
 [x_kalm_mean,x_kalm] = Kalman_New_Dimension(M,H,T,F,MQ,Q,R,x_init,vecteur_y,variance_initial);
 
 % 
 
 [eq , eqm] = mean_erreur_quadratique_suj(vecteur_x, x_kalm_mean, T );
+% The eqm is very high it should be a vecteur computing the error for each
+% component of the vector or at least an eqm for the position vector and
+% one for the speed vector
 eqm
 
 %eqm
