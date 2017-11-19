@@ -38,18 +38,20 @@ R = [ sigma_px^2 0          0;
 
 x_init = [3 40 -4 20 2 30]';
 
-variance_initial = 20000
+variance_initial = 2000;
 
 distance_entre_camera = 10;
 position_camera_1 = [0,0,0];
 position_camera_2 = [distance_entre_camera,0,0];
 
 vecteur_x = creat_trajectoire_3D(F, Q, x_init, T);
-%TODO change vecteur_y, because is should notbe that, we have to pass by the camera.
+%TODO change vecteur_y, because is should not be that, we have to pass by the camera.
+%[vecteur_y] = projection_to_new_dimension(cl_observation, cr_observation)
 vecteur_y = creat_observations_3D(H,R,vecteur_x,T);
 
 [x_kalm_mean,x_kalm] = Kalman_New_Dimension(M,H,T,F,MQ,Q,R,x_init,vecteur_y,variance_initial);
 
+% 
 
 [eq , eqm] = mean_erreur_quadratique_suj(vecteur_x, x_kalm_mean, T );
 eqm
