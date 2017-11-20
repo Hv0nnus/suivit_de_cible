@@ -4,7 +4,7 @@ clc
 % {name] alternatif : convert vector x from [ x, vx, y, vy ,z, vz] to [x,
 % y,z, vx, vy, vz]
 
-%pkg load statistics
+pkg load statistics
 %pkg load geom3d
 
 % Parameters of the cameras set up
@@ -79,7 +79,7 @@ x_init = [3 2 -4 2 2 0.5]';
 % x_init = [3 -4 2 40 20 30] ;
 
 
-variance_initial = 2000;
+variance_initial = 20000;
 
 distance_entre_camera = 10;
 position_camera_1 = [0,0,0];
