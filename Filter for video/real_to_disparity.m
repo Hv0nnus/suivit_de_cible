@@ -25,10 +25,8 @@ P_d = [ P_l(1,:);
         P_r(1,:) - P_l(1,:);
         P_l(3,:)];
 
-    
 Y_disp = P_d*X_real_world;
-Y_disp = Y_disp/Y_disp(length(Y_disp));    
+Y_disp = Y_disp./Y_disp(4,:);    
 
 
 end
-
