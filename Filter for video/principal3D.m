@@ -14,10 +14,10 @@ pkg load statistics
 fps = 1;
 
 % Tps temps d'enregistrement en seconde
-Tps = 60;
+Tps = 100;
 
 
-M = 10; % Number of Gaussians that we use
+M = 1; % Number of Gaussians that we use
 T_e = 1/fps;
 T = fps*Tps; %Number of observations 
 sigma_Q = 10;
@@ -72,16 +72,16 @@ R = [ sigma_px^2 0          0;
      0           sigma_py^2 0;
      0           0          sigma_pz^2]; 
     
-% Matrice f that represente the change between reel world and cameras 
-f = [ 1 0 0;
-      0 1 0;
-      0 0 1];
+% focale f
+f = 4
 % Baseline
 b = 2;
 
 % We have to determine which unite are used for postions and speed (m, m/s
 % ? cm, cm/s ? 
 x_init = [3 2 -4 2 2 0.5]';
+%New init, why not start a 0...
+%x_init = [0 2 0 2 0 0.5]';
 
 % x_init alternatif 
 % x_init = [3 -4 2 40 20 30] ;
@@ -125,12 +125,12 @@ eqm
 figure(1)
 plot3(vecteur_x_disparity(1,:), vecteur_x_disparity(2,:), vecteur_x_disparity(3,:),'b')
 hold on
-plot3(vecteur_y_disparity(1,:), vecteur_y_disparity(2,:), vecteur_y_disparity(3,:),'g')
+%plot3(vecteur_y_disparity(1,:), vecteur_y_disparity(2,:), vecteur_y_disparity(3,:),'g')
 hold on
-plot3(x_kalm_mean(1,:), x_kalm_mean(3,:),x_kalm_mean(5,:),'*')
+%plot3(x_kalm_mean(1,:), x_kalm_mean(3,:),x_kalm_mean(5,:),'*')
 hold on
 for i=1:M
-  plot3(reshape (x_kalm(1,i,:), T, 1), reshape (x_kalm(3,i,:), T, 1),reshape (x_kalm(5,i,:), T, 1),'r')
+  %plot3(reshape (x_kalm(1,i,:), T, 1), reshape (x_kalm(3,i,:), T, 1),reshape (x_kalm(5,i,:), T, 1),'r')
 end
 
 % Trajectoires dans real

@@ -14,11 +14,14 @@
 
 function [X_Image] = real_to_left_camera(X_real_world,f)
 
-K = f*eye(3);
+K = [f 0 0;
+     0 f 0;
+     0 0 1];
+
 t = zeros(3,1);
 P = [K, t];
 
 X = P*X_real_world;
-X_Image = X/X(3);
+X_Image = X/X(3,:);
 
 end

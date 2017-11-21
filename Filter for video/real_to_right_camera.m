@@ -15,7 +15,9 @@
 
 function [X_Image,P] = real_to_right_camera(X_real_world,f,b)
 
-K = f*eye(3);
+K = [f 0 0;
+     0 f 0;
+     0 0 1];
 t = [b,0,0];
 P = [K, t'];
 
