@@ -8,15 +8,15 @@
 %
 
 
-function [ Y_disp ] = real_to_disparity(X_real_world, f, b)
+function [ Y_disp ] = real_to_disparity(X_real_world, f_d, b)
 
-K = [f 0 0;
-     0 f 0;
+K = [f_d(1) 0 0;
+     0 f_d(2) 0;
      0 0 1];
 % Matrice de projection sur la camera gauche
 P_l = [K, [0,0,0]'];
 
-t = [f*b,0,0];
+t = [f_d(1)*b,0,0];
 % Matrice de projection sur la camera droite
 P_r = [K, t'];
 
@@ -27,7 +27,7 @@ P_d = [ P_l(1,:);
         P_l(3,:)];
 
 Y_disp = P_d*X_real_world;
-Y_disp = Y_disp./Y_disp(4,:);    
+Y_disp = Y_disp./Y_disp(4,:);  
 
 
 end

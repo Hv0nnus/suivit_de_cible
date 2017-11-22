@@ -15,10 +15,10 @@
 
 function [X_Image,P] = real_to_right_camera(X_real_world,f,b)
 
-K = [f 0 0;
-     0 f 0;
+K = [f_d[0] 0 0;
+     0 f_d[0] 0;
      0 0 1];
-t = [b,0,0];
+t = [b*f_d[0],0,0];
 P = [K, t'];
 
 X = P*X_real_world;

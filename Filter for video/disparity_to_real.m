@@ -22,14 +22,15 @@
 ## Author: Tanguy <Tanguy@DESKTOP-323V8B4>
 ## Created: 2017-11-20
 
-function [ x_kalm_mean_real ] = disparity_to_real(x_kalm_mean, f, b)
+function [ x_kalm_mean_real ] = disparity_to_real(x_kalm_mean, f_d, b)
 
-K = f*eye(3);
-
+K = [f_d(1) 0 0;
+     0 f_d(2) 0;
+     0 0 1];
 % Matrice de projection sur la camera gauche
 P_l = [K, [0,0,0]'];
 
-t = [b,0,0];
+t = [f_d(2)*b,0,0];
 % Matrice de projection sur la camera droite
 P_r = [K, t'];
 
@@ -38,6 +39,7 @@ P_d = [ P_l(1,:);
         P_l(2,:);
         P_r(1,:) - P_l(1,:);
         P_l(3,:)];
+
 inv_P_d = inv(P_d);
 x_kalm_mean_real = inv_P_d*x_kalm_mean;
 x_kalm_mean_real = x_kalm_mean_real./x_kalm_mean_real(4,:);    

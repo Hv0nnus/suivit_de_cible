@@ -14,8 +14,8 @@
 
 function [X_Image] = real_to_left_camera(X_real_world,f)
 
-K = [f 0 0;
-     0 f 0;
+K = [f_d[0] 0 0;
+     0 f_d[1] 0;
      0 0 1];
 
 t = zeros(3,1);
