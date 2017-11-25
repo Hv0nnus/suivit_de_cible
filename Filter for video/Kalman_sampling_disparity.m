@@ -1,8 +1,8 @@
 function [x_kalm_mean,x_kalm] = Kalman_sampling_disparity (M,H,T,F,MQ,Q,R,x_init,vecteur_y_disparity,variance_initial)
   weight = ones(1,M)/M; % weight of the Gaussians
-  weight_init = weight;
+
   x_kalm = zeros(length(x_init),M,T); %We will store the value here
-  U = randn(3,M) * sqrtm(eye(M)*variance_initial) + repmat(vecteur_y(:,1),1,M); % start of diferent Kalman
+  U = randn(3,M) * sqrtm(eye(M)*variance_initial) + repmat(vecteur_y(:,1),1,M); % start of different Kalman
   x_kalm([1,3,5],:,1) = U; % put of start value to the vector that will store the position
   P_kalm = ones(length(x_init),length(x_init),M); % Variance of the problem
   %I don't know how to make the next loop faster...
