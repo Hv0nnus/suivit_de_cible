@@ -79,7 +79,9 @@ b = 20;
 % Number of particule
 nofParticles = 250;
 %   - dPP:        coordinates of the principal point
-dPP = [0 0]
+dPP = [0 0];
+% Number of sampling for the gaussian at each iteration
+number_sampling = M*10;
 
 % We have to determine which unite are used for postions and speed (m, m/s
 % ? cm, cm/s ? 
@@ -106,9 +108,9 @@ vecteur_x_disparity = real_to_disparity(vecteur_x_modify, f_d, b,dPP);
 
 vecteur_y_disparity = creat_observations_3D(H,R,vecteur_x_disparity(1:3,:),T);
 %vecteur_y_disparity = vecteur_x_disparity(1:3,:) %Try with real value
-
+1
 %[x_kalm_mean,x_kalm] = Kalman_New_Dimension(M,H,T,F,MQ,Q,R,x_init,vecteur_y,variance_initial);
-[x_kalm_mean,x_kalm] = Kalman_New_Dimension(M,H,T,F,MQ,Q,R,x_init,vecteur_y_disparity,variance_initial);
+[x_kalm_mean,x_kalm] = Kalman_New_Dimension(M,H,T,F,MQ,Q,R,x_init,vecteur_y_disparity,variance_initial,number_sampling,f_d, b,dPP)
 
 x_kalm_mean_real = x_kalm_mean([1 3 5],:);
 x_kalm_mean_real(4,:) = ones(1,T);
