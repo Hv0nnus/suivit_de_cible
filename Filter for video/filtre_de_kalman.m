@@ -34,7 +34,7 @@ else
       
       %Prediction
       m_n_npr = F*x_kalm_prec_j;
-      P_n_npr = F*P_kalm_prec_j*F'+Q;
+      P_n_npr =2 F*P_kalm_prec_j*F'+Q;
       
       %Mise a jour
       K_n = P_n_npr*H'/(H*P_n_npr*H'+ R) ;

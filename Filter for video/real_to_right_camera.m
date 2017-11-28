@@ -13,12 +13,12 @@
 % cours : https://team.inria.fr/steep/files/2015/03/poly_3D.pdf
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [X_Image,P] = real_to_right_camera(X_real_world,f,b)
+function [X_Image,P] = real_to_right_camera(X_real_world,f_d,b)
 
-K = [f_d[0] 0 0;
-     0 f_d[0] 0;
+K = [f_d(1) 0 0;
+     0 f_d(2) 0;
      0 0 1];
-t = [b*f_d[0],0,0];
+t = [b*f_d(1),0,0];
 P = [K, t'];
 
 X = P*X_real_world;
