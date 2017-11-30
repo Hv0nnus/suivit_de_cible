@@ -1,11 +1,11 @@
-function vecteur_x = creat_trajectoire_3D(F, Q, x_init, T)
+function vecteur_x = creat_trajectoire_3D(F_generate_trajectory, MQ__generate_trajectory, x_init, T)
 
-  vecteur_x = zeros(3,T);
+  vecteur_x = zeros(6,T);
   vecteur_x(:,1) = x_init;
 
   for i=1:T-1
-    U = sqrtm(Q) * randn(3,1);
-    vecteur_x(:,i+1) = F * vecteur_x(:,i) + U;      
+    U = sqrtm(MQ__generate_trajectory) * randn(6,1);
+    vecteur_x(:,i+1) = F_generate_trajectory * vecteur_x(:,i) + U;      
   end
 
 

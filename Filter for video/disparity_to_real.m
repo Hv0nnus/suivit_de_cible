@@ -31,7 +31,7 @@ K = [f_d(1) 0 dPP(1);
 % Matrice de projection sur la camera gauche
 P_l = [K, [0,0,0]'];
 
-t = [f_d(2)*b,0,0];
+t = [f_d(1)*b,0,0];
 % Matrice de projection sur la camera droite
 P_r = [K, t'];
 

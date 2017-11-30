@@ -20,12 +20,12 @@ Tps = 10;
 M = 1; % Number of gaussian that we use
 T_e = 1/fps;
 T = fps*Tps; %Number of observations 
-sigma_Q = 10;
-sigma_px = sigma_Q*5;
-sigma_py = sigma_Q*5;
-sigma_pz = sigma_Q*5;
+sigma_Q = 1;
+sigma_px = sigma_Q*0.05;
+sigma_py = sigma_Q*0.05;
+sigma_pz = sigma_Q*0.05;
 
-F = [ 1 T_e 0 0 0 0;
+F_generate_trajectory = [ 1 T_e 0 0 0 0;
     0 1   0 0 0 0;
     0 0   1 T_e 0 0;
     0 0   0 1 0 0;
@@ -33,7 +33,7 @@ F = [ 1 T_e 0 0 0 0;
     0 0 0 0 0 1];
 
 % F in 3D
-F = eye(3)*10
+F = eye(3);
 
 % F alternatif
 % F = [ 1 0 0 T_e 0 0;
@@ -53,7 +53,7 @@ H = [ 1 0 0 0 0 0;
 %    0 0 1 0 0 0;
 %    0 0 0 0 1 0];
 
-MQ = [ (T_e^3)/3   (T_e^2)/2 0         0          0     0           ; 
+MQ__generate_trajectory = [ (T_e^3)/3   (T_e^2)/2 0         0          0     0           ; 
       (T_e^2)/2   T_e       0         0           0     0           ;  
       0           0         (T_e^3)/3 (T_e^2)/2   0     0      ;
       0           0         (T_e^2)/2 T_e         0     0      ;
@@ -91,7 +91,7 @@ n_particule = 100;
 
 % We have to determine which unite are used for postions and speed (m, m/s
 % ? cm, cm/s ? 
-x_init = [3 2 -4]';
+x_init = [3 2 -4 4 5 6]';
 %New init, why not start a 0...
 %x_init = [0 2 0 2 0 0.5]';
 
@@ -99,15 +99,15 @@ x_init = [3 2 -4]';
 % x_init = [3 -4 2 40 20 30] ;
 
 
-variance_initial = 200000;
+variance_initial = 20000;
 
 distance_entre_camera = 10;
 position_camera_1 = [0,0,0];
 position_camera_2 = [distance_entre_camera,0,0];
 
-vecteur_x = creat_trajectoire_3D(F, Q, x_init, T);
-vecteur_x
-vecteur_x_modify = vecteur_x(:,:);
+vecteur_x = creat_trajectoire_3D(F_generate_trajectory, MQ__generate_trajectory, x_init, T);
+
+vecteur_x_modify = vecteur_x([1 3 5],:);
 vecteur_x_modify(4,:) = ones(1,T);
 vecteur_x_disparity = real_to_disparity(vecteur_x_modify, f_d, b,dPP);
 
@@ -115,8 +115,9 @@ vecteur_x_disparity = real_to_disparity(vecteur_x_modify, f_d, b,dPP);
 
 vecteur_y_disparity = creat_observations_3D(H,R,vecteur_x_disparity(1:3,:),T);
 %vecteur_y_disparity = vecteur_x_disparity(1:3,:) %Try with real value
-
-
+vecteur_y_disparity
+vecteur_x_disparity
+real_to_disparity(disparity_to_real(vecteur_x_disparity, f_d, b,dPP), f_d, b,dPP)
 [x_kalm_mean,x_kalm] = Kalman_New_Dimension(M,H,T,F,MQ,Q,R,vecteur_x,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP)
 
 x_kalm_mean_real = x_kalm_mean([1 3 5],:);
