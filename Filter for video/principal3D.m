@@ -3,7 +3,6 @@ close all
 clc
 % {name] alternatif : convert vector x from [ x, vx, y, vy ,z, vz] to [x,
 % y,z, vx, vy, vz]
-
 pkg load statistics
 %pkg load geom3d
 
@@ -14,7 +13,7 @@ pkg load statistics
 fps = 1;
 
 % Tps temps d'enregistrement en seconde
-Tps = 100;
+Tps = 2;
 
 
 M = 1; % Number of gaussian that we use
@@ -104,7 +103,7 @@ x_init = [3 2 -4 4 5 6]';
 
 
 variance_initial = 2000;
-
+  
 distance_entre_camera = 10;
 position_camera_1 = [0,0,0];
 position_camera_2 = [distance_entre_camera,0,0];

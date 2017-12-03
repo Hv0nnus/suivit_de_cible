@@ -18,17 +18,23 @@ function [x_kalm_real] = Kalman_New_Dimension(M,H,T,F,MQ,Q,R,vecteur_x_real,vect
   x_kalm_disparity(:,1) = vecteur_y_disparity(1:4,1);
 
   for k=1:T-1
+    %particule_disparity(:,:,k)
     particule_real(:,:,k) = disparity_to_real(particule_disparity(:,:,k), f_d, b,dPP);
     particule_real(:,:,k+1) = Markov_Kernel(F,Q,particule_real(:,:,k),n_particule);
 
     particule_disparity(:,:,k+1) = real_to_disparity(particule_real(:,:,k+1), f_d, b,dPP);
-    
+    particule_disparity(:,:,k+1)
     [x_kalm_disparity(1:3,k+1) P_kalm_disparity ]= recover_gaussian(particule_disparity(1:3,:,k+1));
+    x_kalm_disparity(1:3,k+1)
     [x_kalm_disparity(1:3,k+1) P_kalm_disparity ] = filtre_de_kalman_update(H, R, vecteur_y_disparity(1:3,k+1),x_kalm_disparity(1:3,k+1), P_kalm_disparity);
+    x_kalm_disparity(1:3,k+1)
     
     x_kalm_real(:,k+1) = disparity_to_real(x_kalm_disparity(1:4,k+1), f_d, b,dPP);
     particule_disparity(1:3,:,k+1) = (randn(n_particule,3) * sqrtm(P_kalm_disparity))' + repmat(x_kalm_disparity(1:3,k+1),1,n_particule);
+    %x_kalm_disparity(:,k)
+    P_kalm_disparity
   end
+  x_kalm_disparity
   %plot
   vecteur_y_real = disparity_to_real(vecteur_y_disparity, f_d, b,dPP);
   figure(1)
@@ -38,7 +44,7 @@ function [x_kalm_real] = Kalman_New_Dimension(M,H,T,F,MQ,Q,R,vecteur_x_real,vect
   hold on
   plot3(x_kalm_real(1,:),x_kalm_real(2,:),x_kalm_real(3,:),'r')
   hold on
-  for k=1:T
+  for k=1:2
     plot3(particule_real(1,:,k), particule_real(2,:,k), particule_real(3,:,k),'r+');
     hold on
   end
@@ -51,7 +57,7 @@ function [x_kalm_real] = Kalman_New_Dimension(M,H,T,F,MQ,Q,R,vecteur_x_real,vect
   hold on
   plot3(x_kalm_disparity(1,:),x_kalm_disparity(2,:),x_kalm_disparity(3,:),'r')
   hold on
-  for k=1:T
+  for k=1:2
     plot3(particule_disparity(1,:,k), particule_disparity(2,:,k), particule_disparity(3,:,k),'r+');
     hold on
   end
