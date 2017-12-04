@@ -13,7 +13,7 @@ pkg load statistics
 fps = 1;
 
 % Tps temps d'enregistrement en seconde
-Tps = 2;
+Tps = 100;
 
 
 M = 1; % Number of gaussian that we use
@@ -102,7 +102,7 @@ x_init = [3 2 -4 4 5 6]';
 % x_init = [3 -4 2 40 20 30] ;
 
 
-variance_initial = 2000;
+variance_initial = 200;
   
 distance_entre_camera = 10;
 position_camera_1 = [0,0,0];
