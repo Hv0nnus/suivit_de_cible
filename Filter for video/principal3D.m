@@ -19,10 +19,10 @@ Tps = 100;
 M = 1; % Number of gaussian that we use
 T_e = 1/fps;
 T = fps*Tps; %Number of observations 
-sigma_Q = 1;
-sigma_px = 50;
-sigma_py = 50;
-sigma_pz = 50;
+sigma_Q = 10;
+sigma_px = 100;
+sigma_py = 100;
+sigma_pz = 100;
 
 F_generate_trajectory = [ 1 T_e 0 0 0 0;
     0 1   0 0 0 0;
@@ -86,7 +86,7 @@ f_d = [8/(4.4e-3*1624/800); 8/(4.4e-3*1224/600)];
 % Baseline
 b = 20;
 % Number of particule
-nofParticles = 250;
+nofParticles = 100;
 %   - dPP:        coordinates of the principal point
 dPP = [0 0];
 % Number of sampling for the gaussian at each iteration
@@ -102,7 +102,7 @@ x_init = [3 2 -4 4 5 6]';
 % x_init = [3 -4 2 40 20 30] ;
 
 
-variance_initial = 200;
+variance_initial = 20000;
   
 distance_entre_camera = 10;
 position_camera_1 = [0,0,0];
@@ -121,7 +121,7 @@ vecteur_y_disparity(4,:) = ones(1,T);
 %vecteur_y_disparity = vecteur_x_disparity(1:3,:) %Try with real value
 
 
-[x_kalm_real] = Kalman_New_Dimension(M,H,T,F,MQ,Q,R,vecteur_x_modify,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP);
+[x_kalm_real] = Kalman_New_Dimension(M,H,T,F,Q,R,vecteur_x_modify,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP);
 
 
 
