@@ -13,26 +13,24 @@ pkg load statistics
 fps = 1;
 
 % Tps temps d'enregistrement en seconde
-Tps = 100;
+Tps = 50;
 
 
 M = 1; % Number of gaussian that we use
 T_e = 1/fps;
 T = fps*Tps; %Number of observations 
-sigma_Q = 10;
+sigma_Q = 0.1;
 sigma_px = 100;
 sigma_py = 100;
 sigma_pz = 100;
 
-F_generate_trajectory = [ 1 T_e 0 0 0 0;
+F = [ 1 T_e 0 0 0 0;
     0 1   0 0 0 0;
     0 0   1 T_e 0 0;
     0 0   0 1 0 0;
     0 0 0 0 1 T_e;
     0 0 0 0 0 1];
 
-% F in 3D
-F = eye(3);
 
 % F alternatif
 % F = [ 1 0 0 T_e 0 0;
@@ -47,24 +45,19 @@ H = [ 1 0 0 0 0 0;
    0 0 1 0 0 0;
    0 0 0 0 1 0];
 
-%3D
-H = eye(3);
    
 % H alternatif
 % H = [ 1 0 0 0 0 0;
 %    0 0 1 0 0 0;
 %    0 0 0 0 1 0];
 
-MQ__generate_trajectory = [ (T_e^3)/3   (T_e^2)/2 0         0          0     0           ; 
+MQ = [ (T_e^3)/3   (T_e^2)/2 0         0          0     0           ; 
       (T_e^2)/2   T_e       0         0           0     0           ;  
       0           0         (T_e^3)/3 (T_e^2)/2   0     0      ;
       0           0         (T_e^2)/2 T_e         0     0      ;
       0           0          0    0        (T_e^3)/3 (T_e^2)/2;
       0           0          0    0         (T_e^2)/2 T_e     ];
-%dimension 3 for MQ
-MQ = [ (T_e^3)/3    0         0; 
-       0           (T_e^3)/3    0; 
-       0              0      (T_e^3)/3];
+
  
 %  MQ alternatif 
 %  MQ = [ (T_e^3)/3    0         0     (T_e^2)/2     0          0            ; 
@@ -79,7 +72,7 @@ Q = (sigma_Q^2) * MQ;
 R = [ sigma_px^2 0          0;
      0           sigma_py^2 0;
      0           0          sigma_pz^2]; 
-    
+
 % focale f
 f_d = [8/(4.4e-3*1624/800); 8/(4.4e-3*1224/600)];
 %f_d = [-8; -8];
@@ -101,14 +94,19 @@ x_init = [3 2 -4 4 5 6]';
 % x_init alternatif 
 % x_init = [3 -4 2 40 20 30] ;
 
-
-variance_initial = 20000;
+%variance_initial = 20000;
+variance_initial = [ 20000 0 0 0 0 0;
+    0 10   0 0 0 0;
+    0 0   20000 0 0 0;
+    0 0   0 10 0 0;
+    0 0 0 0 20000 0;
+    0 0 0 0 0 10];
   
 distance_entre_camera = 10;
 position_camera_1 = [0,0,0];
 position_camera_2 = [distance_entre_camera,0,0];
 
-vecteur_x = creat_trajectoire_3D(F_generate_trajectory, MQ__generate_trajectory, x_init, T);
+vecteur_x = creat_trajectoire_3D(F, MQ, x_init, T);
 
 vecteur_x_modify = vecteur_x([1 3 5],:);
 vecteur_x_modify(4,:) = ones(1,T);
@@ -120,8 +118,8 @@ vecteur_y_disparity(1:3,:) = creat_observations_3D(H,R,vecteur_x_disparity(1:3,:
 vecteur_y_disparity(4,:) = ones(1,T);
 %vecteur_y_disparity = vecteur_x_disparity(1:3,:) %Try with real value
 
-
-[x_kalm_real] = Kalman_New_Dimension(M,H,T,F,Q,R,vecteur_x_modify,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP);
+%R = 100*R
+[x_kalm_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init,vecteur_x_modify,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP);
 
 
 

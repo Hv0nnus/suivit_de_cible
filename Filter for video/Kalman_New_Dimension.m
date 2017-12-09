@@ -21,10 +21,11 @@ function [x_kalm_real] = Kalman_New_Dimension(M,H,T,F,Q,R,vecteur_x_real,vecteur
   for k=1:T-1
     %particule_disparity(:,:,k)
     particule_real(:,:,k) = disparity_to_real(particule_disparity(:,:,k), f_d, b,dPP);
-    %particule_real(:,:,k+1) = Markov_Kernel(F,Q,particule_real(:,:,k),n_particule);
-    %particule_disparity(:,:,k+1) = real_to_disparity(particule_real(:,:,k+1), f_d, b,dPP);
+
+    particule_real(:,:,k+1) = Markov_Kernel(F,Q,particule_real(:,:,k),n_particule);
+    particule_disparity(:,:,k+1) = real_to_disparity(particule_real(:,:,k+1), f_d, b,dPP);
     %essaie...
-    particule_disparity(:,:,k+1) = Markov_Kernel(F,Q,particule_disparity(:,:,k),n_particule);
+    %particule_disparity(:,:,k+1) = Markov_Kernel(F,Q,particule_disparity(:,:,k),n_particule);
 
     particule_disparity_save(:,:,k+1) = particule_disparity(1:3,:,k+1);
     [x_kalm_disparity(1:3,k+1) P_kalm_disparity ]= recover_gaussian(particule_disparity(1:3,:,k+1));
@@ -44,7 +45,7 @@ function [x_kalm_real] = Kalman_New_Dimension(M,H,T,F,Q,R,vecteur_x_real,vecteur
   axis([-1000 1000 -1000 1000 -1000 1000])
   plot3(vecteur_x_real(1,:), vecteur_x_real(2,:), vecteur_x_real(3,:),'b')
   hold on
-  plot3(vecteur_y_real(1,:),vecteur_y_real(2,:),vecteur_y_real(3,:),'g')
+  %plot3(vecteur_y_real(1,:),vecteur_y_real(2,:),vecteur_y_real(3,:),'g')
   hold on
   plot3(x_kalm_real(1,:),x_kalm_real(2,:),x_kalm_real(3,:),'r')
   hold on
