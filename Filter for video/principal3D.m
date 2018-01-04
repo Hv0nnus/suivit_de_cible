@@ -61,11 +61,12 @@ MQ__generate_trajectory = [ (T_e^3)/3   (T_e^2)/2 0         0          0     0  
       0           0         (T_e^2)/2 T_e         0     0      ;
       0           0          0    0        (T_e^3)/3 (T_e^2)/2;
       0           0          0    0         (T_e^2)/2 T_e     ];
+
 %dimension 3 for MQ
 MQ = [ (T_e^3)/3    0         0; 
        0           (T_e^3)/3    0; 
        0              0      (T_e^3)/3];
- 
+
 %  MQ alternatif 
 %  MQ = [ (T_e^3)/3    0         0     (T_e^2)/2     0          0            ; 
 %       0           (T_e^3)/3    0         0     (T_e^2)/2      0            ; 

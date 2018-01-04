@@ -8,7 +8,7 @@
 %
 
 
-function [ Y_disp ] = real_to_disparity(X_real_world, f_d, b,dPP)
+function [ X_disp ] = real_to_disparity(X_real_world, f_d, b,dPP)
 
 K = [f_d(1) 0 dPP(1);
      0 f_d(2) dPP(2);
@@ -26,8 +26,10 @@ P_d = [ P_l(1,:);
         P_r(1,:) - P_l(1,:);
         P_l(3,:)];
 
-Y_disp = P_d*X_real_world;
-Y_disp = Y_disp./Y_disp(4,:);  
+X_disp_position = P_d*X_real_world([1 3 5 7]);
+X_disp_position = X_disp_position./X_disp_position(4,:);  
+
+
 
 
 end

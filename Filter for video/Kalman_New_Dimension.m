@@ -42,7 +42,7 @@ function [x_kalm_real] = Kalman_New_Dimension(M,H,T,F,Q,R,vecteur_x_real,vecteur
   %plot
   vecteur_y_real = disparity_to_real(vecteur_y_disparity, f_d, b,dPP);
   figure(1)
-  axis([-1000 1000 -1000 1000 -1000 1000])
+  %axis([-1000 1000 -1000 1000 -1000 1000])
   plot3(vecteur_x_real(1,:), vecteur_x_real(2,:), vecteur_x_real(3,:),'b')
   hold on
   %plot3(vecteur_y_real(1,:),vecteur_y_real(2,:),vecteur_y_real(3,:),'g')
@@ -54,7 +54,7 @@ function [x_kalm_real] = Kalman_New_Dimension(M,H,T,F,Q,R,vecteur_x_real,vecteur
     hold on
   end
   ax = 1000
-  axis([-ax ax -ax ax -ax ax])
+  %axis([-ax ax -ax ax -ax ax])
   hold off
   
   vecteur_x_disparity = real_to_disparity(vecteur_x_real, f_d, b,dPP);
@@ -69,7 +69,7 @@ function [x_kalm_real] = Kalman_New_Dimension(M,H,T,F,Q,R,vecteur_x_real,vecteur
   for k=1:T
     %plot3(particule_disparity_save(1,:,k),particule_disparity_save(2,:,k),particule_disparity_save(3,:,k),'b+')
     hold on
-    %plot3(particule_disparity(1,:,k), particule_disparity(2,:,k), particule_disparity(3,:,k),'r+');
+    plot3(particule_disparity(1,:,k), particule_disparity(2,:,k), particule_disparity(3,:,k),'r+');
     hold on
   end
 [eq , eqm_disparity] = mean_erreur_quadratique_suj(vecteur_x_disparity, x_kalm_disparity, T );
