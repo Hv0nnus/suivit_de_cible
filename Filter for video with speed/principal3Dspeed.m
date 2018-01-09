@@ -13,23 +13,23 @@ pkg load statistics
 fps = 1;
 
 % Tps temps d'enregistrement en seconde
-Tps = 50;
+Tps = 100;
 
 
 M = 1; % Number of gaussian that we use
 T_e = 1/fps;
 T = fps*Tps; %Number of observations 
-sigma_Q = 0.1;
-sigma_px = 100;
-sigma_py = 100;
-sigma_pz = 100;
+sigma_Q = 0.01;
+sigma_px = 1;
+sigma_py = 1;
+sigma_pz = 1;
 
-F = [ 1 T_e 0 0 0 0;
-    0 1   0 0 0 0;
-    0 0   1 T_e 0 0;
-    0 0   0 1 0 0;
-    0 0 0 0 1 T_e;
-    0 0 0 0 0 1];
+F = [ 1 T_e 0   0 0 0  ;
+      0 1   0 0   0 0  ;
+      0 0   1 T_e 0 0  ;
+      0 0   0 1   0 0  ;
+      0 0   0 0   1 T_e;
+      0 0   0 0   0 1  ];
 
 
 % F alternatif
@@ -87,7 +87,7 @@ n_particule = 100;
 
 % We have to determine which unite are used for postions and speed (m, m/s
 % ? cm, cm/s ? 
-x_init = [3 2 -4 4 5 6]';
+x_init_reel = [3 0.2 -4 0.4 5 0.6]';
 %New init, why not start a 0...
 %x_init = [0 2 0 2 0 0.5]';
 
@@ -106,52 +106,27 @@ distance_entre_camera = 10;
 position_camera_1 = [0,0,0];
 position_camera_2 = [distance_entre_camera,0,0];
 
-vecteur_x = creat_trajectoire_3D(F, MQ, x_init, T);
+vecteur_x_reel = creat_trajectoire_3D(F, MQ, x_init_reel, T);
 
-vecteur_x_modify = vecteur_x([1 3 5],:);
-vecteur_x_modify(4,:) = ones(1,T);
-vecteur_x_disparity = real_to_disparity(vecteur_x_modify, f_d, b,dPP);
+%vecteur_x_modify = vecteur_x([1 3 5],:);
+%vecteur_x_modify(4,:) = ones(1,T);
+vecteur_x_disparity = real_to_disparity_with_speed(vecteur_x_reel, f_d, b,dPP);
 
-%vecteur_x_disparity = vecteur_x_disparity(1:3,:)/vecteur_x_disparity(4,:);
+x_init_disparity = vecteur_x_disparity(:,1);
 
-vecteur_y_disparity(1:3,:) = creat_observations_3D(H,R,vecteur_x_disparity(1:3,:),T);
+vecteur_y_disparity(1:3,:) = creat_observations_3D(H,R,vecteur_x_disparity([1 3 5],:),T);
 vecteur_y_disparity(4,:) = ones(1,T);
 %vecteur_y_disparity = vecteur_x_disparity(1:3,:) %Try with real value
 
 %R = 100*R
-[x_kalm_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init,vecteur_x_modify,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP);
+[x_kalm_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init_reel,x_init_disparity,vecteur_x_reel,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP);
 
 
 
-[eq , eqm_real] = mean_erreur_quadratique_suj(vecteur_x([1 3 5],:), x_kalm_real(1:3,:), T );
+[eq , eqm_real] = mean_erreur_quadratique_suj(vecteur_x_reel([1 3 5],:), x_kalm_real([1 3 5],:), T );
 % The eqm is very high it should be a vecteur computing the error for each
 % component of the vector or at least an eqm for the position vector and
 % one for the speed vector
 eqm_real
-[eq , eqm_real_observation] = mean_erreur_quadratique_suj(vecteur_x([1 3 5],:), disparity_to_real(vecteur_y_disparity, f_d, b,dPP)(1:3,:), T );
+[eq , eqm_real_observation] = mean_erreur_quadratique_suj(vecteur_x_reel([1 3 5],:), disparity_to_real(vecteur_y_disparity, f_d, b,dPP)(1:3,:), T );
 eqm_real_observation
-%eqm
-
-% Trajectoires dans disparity
-%figure(3)
-%plot3(vecteur_x_disparity(1,:), vecteur_x_disparity(2,:), vecteur_x_disparity(3,:),'b')
-hold on
-%plot3(vecteur_y_disparity(1,:), vecteur_y_disparity(2,:), vecteur_y_disparity(3,:),'g')
-hold on
-%plot3(x_kalm_mean(1,:), x_kalm_mean(3,:),x_kalm_mean(5,:),'*')
-hold on
-for i=1:M
-  %plot3(reshape (x_kalm(1,i,:), T, 1), reshape (x_kalm(3,i,:), T, 1),reshape (x_kalm(5,i,:), T, 1),'r')
-end
-
-% Trajectoires dans real
-%figure(4)
-%plot3(vecteur_x(1,:), vecteur_x(3,:), vecteur_x(5,:),'b')
-hold on
-%plot3(x_kalm_real(1,:), x_kalm_real(2,:), x_kalm_real(3,:),'r')
-hold on
-%plot3(x_kalm_mean_real(1,:), x_kalm_mean_real(2,:),x_kalm_mean_real(3,:),'*')
-hold on
-for i=1:M
-  %plot3(reshape (x_kalm(1,i,:), T, 1), reshape (x_kalm(3,i,:), T, 1),reshape (x_kalm(5,i,:), T, 1),'r')
-end
