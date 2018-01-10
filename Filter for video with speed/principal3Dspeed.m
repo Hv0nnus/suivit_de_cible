@@ -1,6 +1,14 @@
 clear all
 close all
 clc
+
+
+%eqm_disparity =  2467.5
+%eqm_disparity_observation =  2468.3
+%eqm_real =  19.925
+%eqm_real_observation =  70.106
+
+
 % {name] alternatif : convert vector x from [ x, vx, y, vy ,z, vz] to [x,
 % y,z, vx, vy, vz]
 pkg load statistics
@@ -19,10 +27,10 @@ Tps = 100;
 M = 1; % Number of gaussian that we use
 T_e = 1/fps;
 T = fps*Tps; %Number of observations 
-sigma_Q = 0.01;
-sigma_px = 1;
-sigma_py = 1;
-sigma_pz = 1;
+sigma_Q = 1;
+sigma_px = 10;
+sigma_py = 10;
+sigma_pz = 10;
 
 F = [ 1 T_e 0   0 0 0  ;
       0 1   0 0   0 0  ;
@@ -87,7 +95,7 @@ n_particule = 100;
 
 % We have to determine which unite are used for postions and speed (m, m/s
 % ? cm, cm/s ? 
-x_init_reel = [3 0.2 -4 0.4 5 0.6]';
+x_init_reel = [3 2 -4 4 5 6]';
 %New init, why not start a 0...
 %x_init = [0 2 0 2 0 0.5]';
 
@@ -95,13 +103,13 @@ x_init_reel = [3 0.2 -4 0.4 5 0.6]';
 % x_init = [3 -4 2 40 20 30] ;
 
 %variance_initial = 20000;
-variance_initial = [ 20000 0 0 0 0 0;
+variance_initial = [ 200 0 0 0 0 0;
     0 10   0 0 0 0;
-    0 0   20000 0 0 0;
+    0 0   200 0 0 0;
     0 0   0 10 0 0;
-    0 0 0 0 20000 0;
+    0 0 0 0 200 0;
     0 0 0 0 0 10];
-  
+
 distance_entre_camera = 10;
 position_camera_1 = [0,0,0];
 position_camera_2 = [distance_entre_camera,0,0];
@@ -118,7 +126,7 @@ vecteur_y_disparity(1:3,:) = creat_observations_3D(H,R,vecteur_x_disparity([1 3 
 vecteur_y_disparity(4,:) = ones(1,T);
 %vecteur_y_disparity = vecteur_x_disparity(1:3,:) %Try with real value
 
-%R = 100*R
+%R = 10*R
 [x_kalm_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init_reel,x_init_disparity,vecteur_x_reel,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP);
 
 

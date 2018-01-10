@@ -38,24 +38,24 @@ function [x_kalm_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init_reel,x_init
 
     [x_kalm_disparity(1:6,k+1) P_kalm_disparity ] = filtre_de_kalman_update(H, R, vecteur_y_disparity(1:3,k+1),x_kalm_disparity(1:6,k+1), P_kalm_disparity);
 
-    
     x_kalm_real(:,k+1) = disparity_to_real_with_speed(x_kalm_disparity(:,k+1), f_d, b,dPP);
     particule_disparity(1:n,:,k+1) = (randn(n_particule,n) * sqrtm(P_kalm_disparity))' + repmat(x_kalm_disparity(1:n,k+1),1,n_particule);
-    mean(mean(P_kalm_disparity))/(n*n);
+    %P_kalm_disparity
+    %mean(mean(P_kalm_disparity))/(n*n)
   end
   %x_kalm_disparity
   %plot
-  %vecteur_y_real = disparity_to_real(vecteur_y_disparity, f_d, b,dPP);
+  vecteur_y_real = disparity_to_real(vecteur_y_disparity, f_d, b,dPP);
   figure(1)
   %axis([-1000 1000 -1000 1000 -1000 1000])
   plot3(vecteur_x_real(1,:), vecteur_x_real(3,:), vecteur_x_real(5,:),'b')
   hold on
-  %plot3(vecteur_y_real(1,:),vecteur_y_real(2,:),vecteur_y_real(3,:),'g')
+  plot3(vecteur_y_real(1,:),vecteur_y_real(2,:),vecteur_y_real(3,:),'g')
   hold on
   plot3(x_kalm_real(1,:),x_kalm_real(3,:),x_kalm_real(5,:),'r')
   hold on
   for k=1:T
-    plot3(particule_real(1,:,k), particule_real(3,:,k), particule_real(5,:,k),'r+');
+    %plot3(particule_real(1,:,k), particule_real(3,:,k), particule_real(5,:,k),'r+');
     hold on
   end
   %ax = 1000;
@@ -72,9 +72,9 @@ function [x_kalm_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init_reel,x_init
   hold on
   
   for k=1:T
-    plot3(particule_disparity_save(1,:,k),particule_disparity_save(2,:,k),particule_disparity_save(3,:,k),'b+')
+    %plot3(particule_disparity_save(1,:,k),particule_disparity_save(2,:,k),particule_disparity_save(3,:,k),'b+')
     hold on
-    plot3(particule_disparity(1,:,k), particule_disparity(3,:,k), particule_disparity(5,:,k),'r+');
+    %plot3(particule_disparity(1,:,k), particule_disparity(3,:,k), particule_disparity(5,:,k),'r+');
     hold on
   end
   %ax = 1000;
