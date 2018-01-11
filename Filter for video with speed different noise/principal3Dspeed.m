@@ -31,6 +31,9 @@ sigma_Q = 1;
 sigma_px = 10;
 sigma_py = 10;
 sigma_pz = 10;
+sigma_pl_camera = 1000;
+sigma_pv_camera = 1000;
+
 
 F = [ 1 T_e 0   0 0 0  ;
       0 1   0 0   0 0  ;
@@ -81,6 +84,9 @@ R = [ sigma_px^2 0          0;
      0           sigma_py^2 0;
      0           0          sigma_pz^2]; 
 
+R_camera = [ sigma_pl_camera^2          0         ;
+                     0          sigma_pv_camera^2];
+     
 % focale f
 f_d = [8/(4.4e-3*1624/800); 8/(4.4e-3*1224/600)];
 %f_d = [-8; -8];
@@ -122,7 +128,8 @@ vecteur_x_disparity = real_to_disparity_with_speed(vecteur_x_reel, f_d, b,dPP);
 
 x_init_disparity = vecteur_x_disparity(:,1);
 
-vecteur_y_disparity(1:3,:) = creat_observations_3D(H,R,vecteur_x_disparity([1 3 5],:),T);
+
+vecteur_y_disparity(1:3,:) = creat_observations_3D_camera(H,R_camera,vecteur_x_reel([1 3 5 7],:),T,f_d,b);
 vecteur_y_disparity(4,:) = ones(1,T);
 %vecteur_y_disparity = vecteur_x_disparity(1:3,:) %Try with real value
 
