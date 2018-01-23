@@ -1,6 +1,6 @@
 % This function will apply Kalman filter in 3D space
 % vecteur_x should not be here but we will use it to plot
-function [x_kalm_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init_reel,x_init_disparity,vecteur_x_real,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP)
+function [x_kalm_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init_reel,x_init_disparity,vecteur_x_real,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP, all_particule)
   
   n = 6;% length(x_init); % Dimension of the disparity space
 
@@ -46,40 +46,55 @@ function [x_kalm_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init_reel,x_init
   %x_kalm_disparity
   %plot
   vecteur_y_real = disparity_to_real(vecteur_y_disparity, f_d, b,dPP);
+  
+  
+  %all_particule = 1
+  if(all_particule)
+    k = 1:n_particule;
+  else
+    k = 1:10;
+  end
+  
   figure(1)
   %axis([-1000 1000 -1000 1000 -1000 1000])
-  plot3(vecteur_x_real(1,:), vecteur_x_real(3,:), vecteur_x_real(5,:),'b')
-  hold on
-  plot3(vecteur_y_real(1,:),vecteur_y_real(2,:),vecteur_y_real(3,:),'g')
-  hold on
-  plot3(x_kalm_real(1,:),x_kalm_real(3,:),x_kalm_real(5,:),'r')
-  hold on
-  for k=1:T
-    %plot3(particule_real(1,:,k), particule_real(3,:,k), particule_real(5,:,k),'r+');
+  for t=1:T
+    plot3(vecteur_x_real(1,1:t), vecteur_x_real(3,1:t), vecteur_x_real(5,1:t),'b')
     hold on
+    plot3(vecteur_y_real(1,1:t),vecteur_y_real(2,1:t),vecteur_y_real(3,1:t),'g')
+    hold on
+    plot3(x_kalm_real(1,1:t),x_kalm_real(3,1:t),x_kalm_real(5,1:t),'r')
+    hold on
+    plot3(particule_real(1,k,t),particule_real(3,k,t),particule_real(5,k,t),'m.','MarkerSize', 6)
+    hold on
+    
+    drawnow;
+    pause(0.5);
+    if(all_particule)
+      hold off  
+    end
+
   end
-  %ax = 1000;
-  %axis([-ax ax -ax ax -ax ax])
-  hold off
   
+  %figure(1)
+
+  %plot3(vecteur_x_real(1,1), vecteur_x_real(3,1));
+  %axis([0 N 0 1]);
+  %vh = get(gca,'children');
+ %for t=1:T
+    %set(vh, 'xdata',vecteur_x_real(1,1:t), 'ydata', vecteur_y_real(2,1:t),'zdata', vecteur_y_real(3,1:t));
+    %pause(0.1);
+  %end
+
+
   vecteur_x_disparity = real_to_disparity_with_speed(vecteur_x_real, f_d, b,dPP);
-  figure(2)
-  plot3(vecteur_x_disparity(1,:), vecteur_x_disparity(3,:), vecteur_x_disparity(5,:),'b')
-  hold on
-  plot3(vecteur_y_disparity(1,:),vecteur_y_disparity(2,:),vecteur_y_disparity(3,:),'g')
-  hold on
-  plot3(x_kalm_disparity(1,:),x_kalm_disparity(3,:),x_kalm_disparity(5,:),'r')
-  hold on
+  %figure(2)
+  %plot3(vecteur_x_disparity(1,:), vecteur_x_disparity(3,:), vecteur_x_disparity(5,:),'b')
+  %hold on
+  %plot3(vecteur_y_disparity(1,:),vecteur_y_disparity(2,:),vecteur_y_disparity(3,:),'g')
+  %hold on
+  %plot3(x_kalm_disparity(1,:),x_kalm_disparity(3,:),x_kalm_disparity(5,:),'r')
+  %hold on
   
-  for k=1:T
-    %plot3(particule_disparity_save(1,:,k),particule_disparity_save(2,:,k),particule_disparity_save(3,:,k),'b+')
-    hold on
-    %plot3(particule_disparity(1,:,k), particule_disparity(3,:,k), particule_disparity(5,:,k),'r+');
-    hold on
-  end
-  %ax = 1000;
-  %axis([-ax ax -ax ax -ax ax])
-  hold off
 [eq , eqm_disparity] = mean_erreur_quadratique_suj(vecteur_x_disparity(1:3,:), x_kalm_disparity([1 3 5],:), T );
 eqm_disparity
 [eq , eqm_disparity_observation] = mean_erreur_quadratique_suj(vecteur_x_disparity(1:3,:), vecteur_y_disparity(1:3,:), T );
