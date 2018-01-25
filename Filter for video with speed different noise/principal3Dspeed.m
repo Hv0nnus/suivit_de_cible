@@ -13,7 +13,7 @@ clc
 % y,z, vx, vy, vz]
 pkg load statistics
 %pkg load geom3d
-
+rand ("seed", 164)
 % Parameters of the cameras set up
 % f =
 % b =
@@ -23,16 +23,16 @@ fps = 1;
 % Tps temps d'enregistrement en seconde
 Tps = 100;
 
-all_particule = 0
+all_particule = 1
 
 
 M = 1; % Number of gaussian that we use
 T_e = 1/fps;
 T = fps*Tps; %Number of observations 
 sigma_Q = 1;
-sigma_px = 10;
-sigma_py = 10;
-sigma_pz = 10;
+sigma_px = 30;
+sigma_py = 30;
+sigma_pz = 30;
 sigma_pl_camera = 2000;
 sigma_pv_camera = 2000;
 
@@ -86,6 +86,9 @@ R = [ sigma_px^2 0          0;
      0           sigma_py^2 0;
      0           0          sigma_pz^2]; 
 
+Hr = [1 0 1 ; 0 1 0];
+Hl = [1 0 0 ; 0 1 0];
+ 
 R_camera = [ sigma_pl_camera^2          0         ;
                      0          sigma_pv_camera^2];
      
@@ -112,11 +115,11 @@ x_init_reel = [3 2 -4 4 5 6]';
 
 %variance_initial = 20000;
 variance_initial = [ 200 0 0 0 0 0;
-    0 10   0 0 0 0;
-    0 0   200 0 0 0;
-    0 0   0 10 0 0;
-    0 0 0 0 200 0;
-    0 0 0 0 0 10];
+                      0 10   0 0 0 0;
+                      0 0   200 0 0 0;
+                      0 0   0 10 0 0;
+                      0 0 0 0 200 0;
+                      0 0 0 0 0 10];
 
 distance_entre_camera = 10;
 position_camera_1 = [0,0,0];
@@ -130,8 +133,7 @@ vecteur_x_disparity = real_to_disparity_with_speed(vecteur_x_reel, f_d, b,dPP);
 
 x_init_disparity = vecteur_x_disparity(:,1);
 
-
-vecteur_y_disparity(1:3,:) = creat_observations_3D_camera(H,R_camera,vecteur_x_reel([1 3 5 7],:),T,f_d,b);
+[vecteur_y_disparity(1:3,:)] = creat_observations_3D_camera(H,R_camera,vecteur_x_reel([1 3 5 7],:),T,f_d,b,R);
 vecteur_y_disparity(4,:) = ones(1,T);
 %vecteur_y_disparity = vecteur_x_disparity(1:3,:) %Try with real value
 
