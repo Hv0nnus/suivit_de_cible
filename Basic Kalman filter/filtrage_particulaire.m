@@ -1,7 +1,7 @@
 
 % x = vecteur (correspond à x_(k-1) pour i = 1 à N
 % yk = la dernière observation en mémoire
-function  [ particule, poids_norm, estimateur ] = filtrage_particulaire(x,y,w,Q,R,H,k)
+function  [ particule, poids_norm, estimateur ] = filtrage_particulaire(F,x,y,w,Q,R,H,k)
 
 N = length(x);
 

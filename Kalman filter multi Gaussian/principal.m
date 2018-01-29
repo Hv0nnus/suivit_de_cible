@@ -5,10 +5,10 @@ clc
 pkg load statistics
 
 T_e = 1;
-T = 100; %Number of observations
-sigma_Q = 1;
-sigma_px = 200;
-sigma_py = 200;
+T = 30; %Number of observations
+sigma_Q = 10;
+sigma_px = 100;
+sigma_py = 100;
 
 F = [ 1 T_e 0 0;
     0 1   0 0;
@@ -40,13 +40,13 @@ vecteur_y = creat_observations(H,R,vecteur_x,T);
 %  x_voltige =load('vecteur_x_avion_voltige.mat');
 %  y_voltige =load('vecteur_y_avion_voltige.mat');
 
-M = 2;
+M = 10;
 weight = ones(1,M)/M;
 weight_init = weight;
 x_kalm = zeros(length(x_init),M,T);
 %x_kalm(:,1,1) = [-1000 0 600 0]';x_kalm(:,2,1) = [3000 0 -600 0]';x_kalm(:,3,1) = [3000 0 4000 0]';
 %x_kalm([1,3],:,1) = unifrnd(0,4000,2,M);
-U = randn(2,M) * sqrtm(eye(M))*200 + repmat(vecteur_y(:,1),1,M); % C'est quoi ? et puis sqrtm(Eyes) = Eyse non ? c'est pas sqrt(200) ?
+U = randn(2,M) * sqrtm(eye(M))*100 + repmat(vecteur_x([1 3],1),1,M); % C'est quoi ? et puis sqrtm(Eyes) = Eyse non ? c'est pas sqrt(200) ?
 %vecteur_x(:,i+1) = F * vecteur_x(:,i) + U;
 x_kalm([1,3],:,1) = U;
 P_kalm = ones(length(x_init),length(x_init),M);
@@ -100,4 +100,21 @@ plot(x_kalm_mean(1,:), x_kalm_mean(3,:),'*')
 hold on
 for i=1:M
 plot(reshape (x_kalm(1,i,:), T, 1), reshape (x_kalm(3,i,:), T, 1),'r')
+end
+
+f1 = figure(1)
+%axis([-1000 1000 -1000 1000 -1000 1000])
+for t=1:T
+plot(vecteur_x(1,1:t), vecteur_x(3,1:t),'b')
+hold on
+plot(vecteur_y(1,1:t), vecteur_y(2,1:t),'g')
+hold on
+plot(x_kalm_mean(1,1:t), x_kalm_mean(3,1:t),'*')
+hold on
+for i=1:M
+  plot(reshape (x_kalm(1,i,1:t), t, 1), reshape (x_kalm(3,i,1:t), t, 1),'r')
+end
+  drawnow;
+  print(f1,strcat("GM_Gif",int2str(t),".png"))
+  %pause(0.01);
 end

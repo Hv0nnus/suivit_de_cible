@@ -8,14 +8,17 @@ sigma_Q = 1;
 sigma_px = 200;
 sigma_py = 200;
 
-F = [ 1 T_e 0 0;
-      0 1   0 0;
-      0 0   1 T_e;
-      0 0   0 1];
- H = [ 1 0 0 0;
+%F = [ 1 T_e 0 0;
+%      0 1   0 0;
+%      0 0   1 T_e;
+%      0 0   0 1];
+
+F = 4
+
+H = [ 1 0 0 0;
      0 0 1 0];
  
- MQ = [ (T_e^3)/3   (T_e^2)/2 0         0; 
+MQ = [ (T_e^3)/3   (T_e^2)/2 0         0; 
         (T_e^2)/2   T_e       0         0; 
         0           0         (T_e^3)/3 (T_e^2)/2;
         0           0         (T_e^2)/2 T_e];
@@ -61,7 +64,7 @@ poids_init_filtre = ones(1,N) * 1/N;
 
 
 
-[ particule, poids, x_est] = filtrage_particulaire(x_init_filtre, vecteur_y, poids_init_filtre, Q, R, 1);
+[ particule, poids, x_est] = filtrage_particulaire(F,x_init_filtre, vecteur_y, poids_init_filtre, Q, R, 1);
 
 X_est = zeros(1, T);
 X_est(1) = x_est;

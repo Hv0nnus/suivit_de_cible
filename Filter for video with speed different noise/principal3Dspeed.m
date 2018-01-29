@@ -30,11 +30,11 @@ M = 1; % Number of gaussian that we use
 T_e = 1/fps;
 T = fps*Tps; %Number of observations 
 sigma_Q = 1;
-sigma_px = 30;
-sigma_py = 30;
-sigma_pz = 30;
-sigma_pl_camera = 2000;
-sigma_pv_camera = 2000;
+sigma_px = 20;
+sigma_py = 20;
+sigma_pz = 20;
+sigma_pl_camera = 5000;
+sigma_pv_camera = 5000;
 
 
 F = [ 1 T_e 0   0 0 0  ;
@@ -138,7 +138,7 @@ vecteur_y_disparity(4,:) = ones(1,T);
 %vecteur_y_disparity = vecteur_x_disparity(1:3,:) %Try with real value
 
 %R = 10*R
-[x_kalm_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init_reel,x_init_disparity,vecteur_x_reel,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP,all_particule);
+[x_kalm_real,vecteur_x_real,vecteur_y_real,particule_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init_reel,x_init_disparity,vecteur_x_reel,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP,all_particule);
 
 
 

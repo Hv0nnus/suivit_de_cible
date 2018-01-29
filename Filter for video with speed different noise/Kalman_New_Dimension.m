@@ -1,6 +1,6 @@
 % This function will apply Kalman filter in 3D space
 % vecteur_x should not be here but we will use it to plot
-function [x_kalm_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init_reel,x_init_disparity,vecteur_x_real,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP, all_particule)
+function [x_kalm_real,vecteur_x_real,vecteur_y_real,particule_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init_reel,x_init_disparity,vecteur_x_real,vecteur_y_disparity,variance_initial,n_particule,f_d, b,dPP, all_particule)
   
   n = 6;% length(x_init); % Dimension of the disparity space
 
@@ -56,38 +56,31 @@ function [x_kalm_real] = Kalman_New_Dimension(T_e,M,H,T,F,Q,R,x_init_reel,x_init
     k = 1:10;
   end
   
-  f1 = figure(1)
-  %axis([-1000 1000 -1000 1000 -1000 1000])
-  for t=1:T
-    plot3(vecteur_x_real(1,1:t), vecteur_x_real(3,1:t), vecteur_x_real(5,1:t),'b')
-    hold on
-    plot3(vecteur_y_real(1,1:t),vecteur_y_real(2,1:t),vecteur_y_real(3,1:t),'g')
-    hold on
-    plot3(x_kalm_real(1,1:t),x_kalm_real(3,1:t),x_kalm_real(5,1:t),'r')
-    hold on
-    plot3(particule_real(1,k,t),particule_real(3,k,t),particule_real(5,k,t),'m.','MarkerSize', 6)
-    hold on
-    
-    drawnow;
-    print(f1,strcat("Reel_Gif",int2str(t),".png"))
-    %pause(0.01);
-    if(all_particule)
-      hold off  
+  if 0==1
+    f1 = figure(1)
+    %axis([-1000 1000 -1000 1000 -1000 1000])
+    for t=1:T
+      plot3(vecteur_x_real(1,1:t), vecteur_x_real(3,1:t), vecteur_x_real(5,1:t),'b')
+      hold on
+      plot3(vecteur_y_real(1,1:t),vecteur_y_real(2,1:t),vecteur_y_real(3,1:t),'g')
+      hold on
+      plot3(x_kalm_real(1,1:t),x_kalm_real(3,1:t),x_kalm_real(5,1:t),'r')
+      hold on
+      plot3(particule_real(1,k,t),particule_real(3,k,t),particule_real(5,k,t),'m.','MarkerSize', 6)
+      hold on
+      
+      drawnow;
+      print(f1,strcat("Reel_Gif",int2str(t),".png"))
+      %pause(0.01);
+      if(all_particule)
+        hold off  
+      end
+      if(t==T)
+        hold off  
+      end
     end
-    if(t==T)
-      hold off  
-    end
-  end
+   end
 
-  %figure(1)
-
-  %plot3(vecteur_x_real(1,1), vecteur_x_real(3,1));
-  %axis([0 N 0 1]);
-  %vh = get(gca,'children');
- %for t=1:T
-    %set(vh, 'xdata',vecteur_x_real(1,1:t), 'ydata', vecteur_y_real(2,1:t),'zdata', vecteur_y_real(3,1:t));
-    %pause(0.1);
-  %end
 
 
   vecteur_x_disparity = real_to_disparity_with_speed(vecteur_x_real, f_d, b,dPP);
